@@ -20,5 +20,33 @@ namespace GeneticAlgorithmDS
             }
             return bits;
         }
+
+        public static int ToBinary(this int[] array)
+        {
+            return array.Select((item, index) => item * (int)Math.Pow(2, array.Length - 1 - index)).Sum();
+        }
+
+        public static int ToBinary(this string value)
+        {
+            return value.Select(Convert.ToInt32)
+                .Select((digit, i) => digit * (int)Math.Pow(2, value.Length - 1 - i))
+                .Sum();
+        }
+
+        public static int[] Merge(this int[] array, int[] array2)
+        {
+            var newArray = new int[array.Length + array2.Length];
+            array.CopyTo(newArray, 0);
+            array2.CopyTo(newArray, array.Length);
+            return newArray;
+        }
+
+        public static int BinaryConvert(this string binary, int _base)
+        {
+
+            return binary.Select(Convert.ToInt32)
+                .Select((digit, i) => digit * (int)Math.Pow(_base, binary.Length - 1 - i))
+                .Sum();
+        }
     }
 }

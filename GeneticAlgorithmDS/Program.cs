@@ -27,10 +27,11 @@ namespace GeneticAlgorithmDS
 
             getUserInput();
 
-            var algorithm = new geneticAlgorithm<Individual>(populationSize,crossoverRate,mutationRate,iterations,elitism); // CHANGE THE GENERIC TYPE (NOW IT'S INT AS AN EXAMPLE) AND THE PARAMETERS VALUES
-            var solution = fakeProblemGA.Run(null, null, null, null, null);
+            var algorithm = new Algorithm(populationSize,crossoverRate,mutationRate,iterations,elitism); // CHANGE THE GENERIC TYPE (NOW IT'S INT AS AN EXAMPLE) AND THE PARAMETERS VALUES
+            var solution = algorithm.Run();
             Console.WriteLine("Solution: ");
-            //Console.WriteLine(solution);
+            Console.WriteLine(solution);
+            Console.ReadLine();
         }
 
         public static void getUserInput()
@@ -59,15 +60,5 @@ namespace GeneticAlgorithmDS
                 getUserInput();
             }
         }
-
-        private static Individual createIndividual()
-        {
-            return new Individual(5, r.Next(0, 32));
-        }
-        /*private static double CalculateFitness(Individual individual)
-        {
-            var value = individual.toInt() ;
-            return -Math.Pow(value, 2) + 7 * value;
-        }*/
     }
 }

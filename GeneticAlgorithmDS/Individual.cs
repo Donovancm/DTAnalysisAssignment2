@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithmDS
 {
-    public class Individual 
+    public class Individual
     {
         private readonly int[] _binary;
         public int _size;
@@ -19,11 +19,32 @@ namespace GeneticAlgorithmDS
         public Individual(int size, int value)
         {
             _size = size;
-            _binary = value.(size);
+            _binary = value.ToBitsArray(size);
         }
+
         public int[] GetPart(int start, int end)
         {
-            //return;
+            var result = new List<int>();
+            for (var i = start; i < end; i++)
+            {
+                result.Add(_binary[i]);
+            }
+            return result.ToArray();
+        }
+
+        public void Switch(int position)
+        {
+            _binary[position] = _binary[position] == 1 ? 0 : 1;
+        }
+
+        public int ToInt()
+        {
+            return _binary.ToBinary();
+        }
+
+        public override string ToString()
+        {
+            return _binary.Aggregate("", (currentstring, index) => currentstring + index.ToString());
         }
     }
 }
