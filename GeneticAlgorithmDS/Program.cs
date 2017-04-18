@@ -60,11 +60,14 @@ namespace GeneticAlgorithmDS
             }
         }
 
-
-
         private static Individual createIndividual()
         {
             return new Individual(5, r.Next(0, 32));
         }
+        /*private static double CalculateFitness(Individual individual)
+        {
+            var value = individual.toInt() ;
+            return -Math.Pow(value, 2) + 7 * value;
+        }*/
     }
 }
