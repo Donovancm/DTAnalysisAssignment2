@@ -23,6 +23,7 @@ namespace GeneticAlgorithmDS
             this.populationSize = populationSize;
             this.numIterations = numIterations;
         }
+
         public Individual Run()
         {
             // initialize the first population
@@ -87,35 +88,44 @@ namespace GeneticAlgorithmDS
             Console.WriteLine("--------------------------------");
             Console.WriteLine("Genetic Algorithm completed");
             Console.WriteLine("--------------------------------");
-            Console.WriteLine("Average fitness:" + finalFitnesses.Average());
-            Console.WriteLine("Fitness of the best individual:" + winnerIndividual.Item2);
-            Console.WriteLine("Best individual:" + winnerIndividual.Item1 + " " + winnerIndividual.Item1.ToString().BinaryConvert(2));
+            Console.WriteLine("Average fitness of the last population: " + finalFitnesses.Average());
+            Console.WriteLine("Best fitness of the last population: " + finalFitnesses.Max());
+            Console.WriteLine("Best individual of the last population: " + winnerIndividual.Item1);
 
             return currentPopulation.Select((individual, index) => new Tuple<Individual, double>(individual, finalFitnesses[index])).OrderByDescending(tuple => tuple.Item2).First().Item1;
         }
+
         private Individual createIndividual()
         {
-            return new Individual(5, r.Next(0, 32));
+            Individual newIndividual = new Individual(5, r.Next(0, 32));
+            return newIndividual;
         }
+
         private double computeFitness(Individual individual)
         {
-            var value = individual.ToInt();
-            return -Math.Pow(value, 2) + 7 * value;
+            var intToBits = individual.ToBinary();
+            var fitness = -Math.Pow(intToBits, 2) + (7 * intToBits);
+
+            return fitness;
         }
-        private Func<Tuple<Individual, Individual>> selectTwoParents(Individual[] individuals, double[] fitnesses)
+
+        private Func<Tuple<Individual, Individual>> selectTwoParents(Individual[] currentPopulation, double[] fitnesses)
         {
             var parents = new List<Individual>();
-            var FitnessTotal = fitnesses.Sum();
+            var worstFitness = fitnesses.Min();
+            fitnesses = fitnesses.Select(item => item + Math.Abs(worstFitness)).ToArray();
+            var totalProbability = fitnesses.Sum();
 
             while (parents.Count < 2)
             {
-                var randomvalue = new Random().NextDouble() * FitnessTotal;
+                var randomvalue = new Random().NextDouble() * totalProbability;
                 for(var j = 0; j < fitnesses.Length; j++)
                 {
                     randomvalue -= fitnesses[j];
                     if (randomvalue <= 0)
                     {
-                        parents.Add(individuals[j]);
+                        parents.Add(currentPopulation[j]);
+                        break;
                     }
                 }
             }
@@ -124,25 +134,26 @@ namespace GeneticAlgorithmDS
 
         private Tuple<Individual, Individual> crossover(Tuple<Individual, Individual> parents)
         {
-            var par1 = parents.Item1;
-            var par2 = parents.Item2;
+            var offspring1 = parents.Item1;
+            var offspring2 = parents.Item2;
             var tmp = parents.Item2;
 
-            var crossoverPoint = r.Next(0, par1._size);
+            var singleCrossoverPoint = r.Next(0, offspring1._size);
 
-            par1 = new Individual(par1.GetPart(0, crossoverPoint).Merge(par2.GetPart(crossoverPoint, par2._size)));
-            par2 = new Individual(par2.GetPart(0, crossoverPoint).Merge(tmp.GetPart(crossoverPoint, par1._size)));
+            offspring1 = new Individual(offspring1.GetPartOfParent(0, singleCrossoverPoint).Merge(offspring2.GetPartOfParent(singleCrossoverPoint, offspring2._size)));
+            offspring2 = new Individual(offspring2.GetPartOfParent(0, singleCrossoverPoint).Merge(tmp.GetPartOfParent(singleCrossoverPoint, tmp._size)));
 
-            return Tuple.Create(par1, par2);
+            var newChildren = new Tuple<Individual, Individual>(offspring1, offspring2);
+            return newChildren;
         }
 
         private Individual mutation(Individual individual, double mutationRate)
         {
             for (var i = 0; i < individual._size; i++)
             {
-                if (r.Next(100) < mutationRate)
+                if (r.NextDouble() < mutationRate)
                 {
-                    individual.Switch(i);
+                    individual.SwitchPosition(i);
                 }
             }
             return individual;

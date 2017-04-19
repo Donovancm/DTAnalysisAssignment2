@@ -35,18 +35,10 @@ namespace GeneticAlgorithmDS
 
         public static int[] Merge(this int[] array, int[] array2)
         {
-            var newArray = new int[array.Length + array2.Length];
-            array.CopyTo(newArray, 0);
-            array2.CopyTo(newArray, array.Length);
-            return newArray;
-        }
-
-        public static int BinaryConvert(this string binary, int _base)
-        {
-
-            return binary.Select(Convert.ToInt32)
-                .Select((digit, i) => digit * (int)Math.Pow(_base, binary.Length - 1 - i))
-                .Sum();
+            var newIntArray = new int[array.Length + array2.Length];
+            array.CopyTo(newIntArray, 0);
+            array2.CopyTo(newIntArray, array.Length);
+            return newIntArray;
         }
     }
 }

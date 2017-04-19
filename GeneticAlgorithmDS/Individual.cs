@@ -8,7 +8,7 @@ namespace GeneticAlgorithmDS
 {
     public class Individual
     {
-        private readonly int[] _binary;
+        public int[] _binary;
         public int _size;
 
         public Individual(int[] binary)
@@ -16,13 +16,14 @@ namespace GeneticAlgorithmDS
             _size = binary.Length;
             _binary = binary;
         }
+
         public Individual(int size, int value)
         {
             _size = size;
             _binary = value.ToBitsArray(size);
         }
 
-        public int[] GetPart(int start, int end)
+        public int[] GetPartOfParent(int start, int end)
         {
             var result = new List<int>();
             for (var i = start; i < end; i++)
@@ -32,12 +33,12 @@ namespace GeneticAlgorithmDS
             return result.ToArray();
         }
 
-        public void Switch(int position)
+        public void SwitchPosition(int position)
         {
-            _binary[position] = _binary[position] == 1 ? 0 : 1;
+            _binary[position] = _binary[position] == 0 ? 1 : 0;
         }
 
-        public int ToInt()
+        public int ToBinary()
         {
             return _binary.ToBinary();
         }

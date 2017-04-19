@@ -28,9 +28,8 @@ namespace GeneticAlgorithmDS
             getUserInput();
 
             var algorithm = new Algorithm(populationSize,crossoverRate,mutationRate,iterations,elitism); // CHANGE THE GENERIC TYPE (NOW IT'S INT AS AN EXAMPLE) AND THE PARAMETERS VALUES
-            var solution = algorithm.Run();
-            Console.WriteLine("Solution: ");
-            Console.WriteLine(solution);
+            algorithm.Run();
+
             Console.ReadLine();
         }
 
@@ -41,18 +40,18 @@ namespace GeneticAlgorithmDS
 
             try
             {
-                var splitUserInput = userInput.Split(',');
+                var splitInput = userInput.Split(',');
 
-                if (splitUserInput == null)
+                if (splitInput == null)
                 {
                     throw new Exception("You didn't fill in all fields");
                 }
 
-                populationSize = int.Parse(splitUserInput[0]);
-                crossoverRate = double.Parse(splitUserInput[1]);
-                mutationRate = double.Parse(splitUserInput[2]);
-                iterations = int.Parse(splitUserInput[3]);
-                elitism = bool.Parse(splitUserInput[4]);
+                populationSize = int.Parse(splitInput[0]);
+                crossoverRate = double.Parse(splitInput[1]);
+                mutationRate = double.Parse(splitInput[2]);
+                iterations = int.Parse(splitInput[3]);
+                elitism = bool.Parse(splitInput[4]);
             }
             catch (Exception)
             {
